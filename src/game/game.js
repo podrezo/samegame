@@ -12,7 +12,8 @@ class Piece {
 }
 
 class Game {
-  constructor(colsTotal = 0, rowsTotal = 0) {
+  constructor(winCallback = null, colsTotal = 0, rowsTotal = 0) {
+    this.winCallback = winCallback || function() {};
     this.score = 0;
     this.dimx = colsTotal;
     this.dimy = rowsTotal;
@@ -43,6 +44,9 @@ class Game {
       this._destroyPieces();
       this._fallPieces();
       this._compactColumns();
+      if(this._checkWin()) {
+        this.winCallback();
+      }
     } else {
       this._selectPieces(x,y);
     }
@@ -161,6 +165,15 @@ class Game {
         }
       }
     }
+  }
+
+  _checkWin() {
+    for(let y = 0; y < this.dimy; y++) {
+      for(let x = 0; x < this.dimx; x++) {
+        if(this.grid[y][x] !== null) return false;
+      }
+    }
+    return true;
   }
 
   toString() {

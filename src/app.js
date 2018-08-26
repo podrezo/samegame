@@ -13,8 +13,16 @@ const POSSIBLE_COLORS = [
   '#4F86F7', // Blue
 ];
 const BG_COLOR = '#000000';
+let game;
 
-const game = new Game(6, 4);
+const winGame = () => {
+  alert(`You win with ${game.score} points!`);
+  newGame();
+};
+const newGame = () => {
+ game = new Game(winGame, 6, 4);
+}
+newGame();
 
 
 const repaint = () => {

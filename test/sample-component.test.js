@@ -2,7 +2,7 @@ import Game from '../src/game/game';
 
 describe('constructor', () => {
   test('sets size with correct x/y', () => {
-    const game = new Game(4, 3);
+    const game = new Game(null, 4, 3);
     expect(game.dimx).toBe(4);
     expect(game.dimy).toBe(3);
     expect(game.grid.length).toBe(3);
@@ -41,6 +41,14 @@ describe('clickOn', () => {
     expect(game.toString()).toEqual('*1');
     game.clickOn(1,0);
     expect(game.toString()).toEqual('0*');
+  });
+  test('final destruction results in game win callback being invoked', () => {
+    const mockCallback = jest.fn();
+    const game = new Game(mockCallback);
+    game.setGrid('000');
+    game.clickOn(0,0);
+    game.clickOn(0,0);
+    expect(mockCallback.mock.calls.length).toBe(1);
   });
 });
 
@@ -104,5 +112,18 @@ describe('_compactColumns', () => {
   test('pieces fall down', () => {
     game._compactColumns();
     expect(game.toString()).toEqual('00   \n00   \n00   ');
+  });
+});
+
+describe('_checkWin', () => {
+  test('pieces left mean no win', () => {
+    let game = new Game();
+    game.setGrid('  \n0 ');
+    expect(game._checkWin()).toEqual(false);
+  });
+  test('no pieces left means win', () => {
+    let game = new Game();
+    game.setGrid('  \n  ');
+    expect(game._checkWin()).toEqual(true);
   });
 });
