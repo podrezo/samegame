@@ -12,6 +12,7 @@ const POSSIBLE_COLORS = [
   '#FFFF66', // Yellow
   '#4F86F7', // Blue
 ];
+const BG_COLOR = '#000000';
 
 const game = new Game(6, 4);
 
@@ -19,16 +20,23 @@ const game = new Game(6, 4);
 const repaint = () => {
   // background
   const bg = new createjs.Shape();
-  bg.graphics.beginFill('black').drawRect(0, 0, stage.canvas.width, stage.canvas.height);
+  bg.graphics.beginFill(BG_COLOR).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
   stage.addChild(bg);
   // bubbles
-  const BUBBLE_RADIUS = BUBBLE_SIZE/2 * 0.9;
+  const BUBBLE_RADIUS = BUBBLE_SIZE/2 * 0.75;
   const BUBBLE_MARGIN = BUBBLE_SIZE - BUBBLE_RADIUS*2;
   for(let y = 0; y < game.dimy; y++) {
     for(let x = 0; x < game.dimx; x++) {
       if(!game.grid[y][x]) continue;
       const bubble = new createjs.Shape();
       bubble.graphics.beginFill(
+        game.grid[y][x].selected ? POSSIBLE_COLORS[(game.grid[y][x]).color] : BG_COLOR
+      ).drawCircle(
+        BUBBLE_RADIUS + BUBBLE_MARGIN + x*BUBBLE_SIZE,
+        BUBBLE_RADIUS + BUBBLE_MARGIN + y*BUBBLE_SIZE,
+        BUBBLE_RADIUS
+      );
+      bubble.graphics.setStrokeStyle(8,'round').beginStroke(
         POSSIBLE_COLORS[(game.grid[y][x]).color]
       ).drawCircle(
         BUBBLE_RADIUS + BUBBLE_MARGIN + x*BUBBLE_SIZE,
