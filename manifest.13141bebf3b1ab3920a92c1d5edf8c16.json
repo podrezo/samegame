@@ -1,0 +1,41 @@
+{
+  "icons": [
+    {
+      "src": "https://podrezo.github.io/samegame/icon_512x512.0801b6818a0812c7bc7a35468fa694a4.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "https://podrezo.github.io/samegame/icon_384x384.47fd942a56ab7e11f129f1edfff932ad.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "https://podrezo.github.io/samegame/icon_256x256.23b7849331c2d0f7de80c481844afaa5.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "https://podrezo.github.io/samegame/icon_192x192.e9a1e5d0b656317b3d7288d8ce87987b.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://podrezo.github.io/samegame/icon_128x128.9708959f3507d49cf94d2a841c6bf0a9.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "https://podrezo.github.io/samegame/icon_96x96.f87491724c4c7bbb67ab5ae3596d8fb0.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ],
+  "name": "SameGame",
+  "short_name": "SameGame",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": ".",
+  "description": "SameGame",
+  "background_color": "#000000"
+}
