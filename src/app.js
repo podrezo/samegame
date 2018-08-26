@@ -13,6 +13,7 @@ const POSSIBLE_COLORS = [
   '#4F86F7', // Blue
 ];
 const BG_COLOR = '#000000';
+const BUBBLE_OUTLINE_WIDTH = 8;
 let game;
 
 const winGame = () => {
@@ -22,16 +23,31 @@ const winGame = () => {
 
 
 const repaint = () => {
+  // clear stage
+  stage.removeAllChildren();
   // background
   const bg = new createjs.Shape();
   bg.graphics.beginFill(BG_COLOR).drawRect(0, 0, stage.canvas.width, stage.canvas.height);
   stage.addChild(bg);
   // bubbles
   const BUBBLE_RADIUS = BUBBLE_SIZE/2 * 0.75;
-  const BUBBLE_MARGIN = BUBBLE_SIZE - BUBBLE_RADIUS*2;
+  const BUBBLE_MARGIN = BUBBLE_SIZE - BUBBLE_RADIUS*2 - BUBBLE_OUTLINE_WIDTH/2;
   for(let y = 0; y < game.dimy; y++) {
     for(let x = 0; x < game.dimx; x++) {
       if(!game.grid[y][x]) continue;
+      const hitbox = new createjs.Shape();
+      hitbox.graphics.beginFill(BG_COLOR).drawRect(
+        x*BUBBLE_SIZE,
+        y*BUBBLE_SIZE,
+        BUBBLE_SIZE,
+        BUBBLE_SIZE,
+      );
+      hitbox.addEventListener('click', event => {
+        game.clickOn(x,y);
+        repaint();
+      });
+      stage.addChild(hitbox);
+      // the bubble itself
       const bubble = new createjs.Shape();
       bubble.graphics.beginFill(
         game.grid[y][x].selected ? POSSIBLE_COLORS[(game.grid[y][x]).color] : BG_COLOR
@@ -40,17 +56,13 @@ const repaint = () => {
         BUBBLE_RADIUS + BUBBLE_MARGIN + y*BUBBLE_SIZE,
         BUBBLE_RADIUS
       );
-      bubble.graphics.setStrokeStyle(8,'round').beginStroke(
+      bubble.graphics.setStrokeStyle(BUBBLE_OUTLINE_WIDTH,'round').beginStroke(
         POSSIBLE_COLORS[(game.grid[y][x]).color]
       ).drawCircle(
         BUBBLE_RADIUS + BUBBLE_MARGIN + x*BUBBLE_SIZE,
         BUBBLE_RADIUS + BUBBLE_MARGIN + y*BUBBLE_SIZE,
         BUBBLE_RADIUS
       );
-      bubble.addEventListener('click', event => {
-        game.clickOn(x,y);
-        repaint();
-      });
       stage.addChild(bubble);
     }
   }
