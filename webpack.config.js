@@ -1,6 +1,7 @@
 const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
 const webpack = require('webpack');
 
 const config = {
@@ -30,6 +31,19 @@ const config = {
     new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       template: './src/index.html'
+    }),
+    new WebpackPwaManifest({
+      name: 'SameGame',
+      short_name: 'SameGame',
+      description: 'SameGame',
+      background_color: '#000000',
+      crossorigin: null,
+      icons: [
+        {
+          src: path.resolve('src/assets/icon.png'),
+          sizes: [96, 128, 192, 256, 384, 512] // multiple sizes
+        }
+      ]
     })
   ],
   module: {
