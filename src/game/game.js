@@ -42,6 +42,7 @@ class Game {
     if(this.grid[y][x].selected) {
       this._destroyPieces();
       this._fallPieces();
+      this._compactColumns();
     } else {
       this._selectPieces(x,y);
     }
@@ -120,6 +121,44 @@ class Game {
       // Go down the column again and reconfigure
       for(let y = 0; y < this.dimy; y++) {
         this.grid[y][x] = compactedList[y];
+      }
+    }
+  }
+
+  _compactColumns() {
+    let canBeCompacted = () => {
+      let bottomRow = this.grid[this.dimy-1];
+      let emptyEncountered = false;
+      for(let i=0; i<bottomRow.length; i++) {
+        if(bottomRow[i] === null) {
+          emptyEncountered = true;
+        } else if(emptyEncountered) {
+          return true;
+        }
+      }
+      return false;
+    }
+    while(canBeCompacted()) {
+      // iterate over each column instead of each row
+      // ignore last row because there's nothing to compact
+      for(let x = 0; x < this.dimx-1; x++) {
+        // check if the column contains any pieces
+        let columnContainsPieces = false;
+        for(let y = 0; y < this.dimy; y++) {
+          if(this.grid[y][x] === null) {
+            continue;
+          } else {
+            columnContainsPieces = true;
+            break;
+          }
+        }
+        if(!columnContainsPieces) {
+          // Go down the column again and reconfigure
+          for(let y = 0; y < this.dimy; y++) {
+            this.grid[y][x] = this.grid[y][x+1];
+            this.grid[y][x+1] = null;
+          }
+        }
       }
     }
   }

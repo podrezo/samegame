@@ -94,3 +94,15 @@ describe('_fallPieces', () => {
     expect(game.toString()).toEqual('   0\n   1\n 000');
   });
 });
+
+describe('_compactColumns', () => {
+  let game;
+  beforeEach(() => {
+    game = new Game();
+    game.setGrid('0  0 \n0  0 \n0  0 ');
+  });
+  test('pieces fall down', () => {
+    game._compactColumns();
+    expect(game.toString()).toEqual('00   \n00   \n00   ');
+  });
+});
