@@ -26,13 +26,24 @@ const repaint = () => {
   const BUBBLE_MARGIN = BUBBLE_SIZE - BUBBLE_RADIUS*2;
   for(let y = 0; y < game.dimy; y++) {
     for(let x = 0; x < game.dimx; x++) {
+      if(!game.grid[y][x]) continue;
       const bubble = new createjs.Shape();
-      bubble.graphics.beginFill(POSSIBLE_COLORS[game.grid[y][x]]).drawCircle(BUBBLE_RADIUS + BUBBLE_MARGIN + x*BUBBLE_SIZE, BUBBLE_RADIUS + BUBBLE_MARGIN + y*BUBBLE_SIZE, BUBBLE_RADIUS);
-      bubble.addEventListener('click', event => { console.log(`Clicked on ${x},${y}`) })
+      bubble.graphics.beginFill(
+        POSSIBLE_COLORS[(game.grid[y][x]).color]
+      ).drawCircle(
+        BUBBLE_RADIUS + BUBBLE_MARGIN + x*BUBBLE_SIZE,
+        BUBBLE_RADIUS + BUBBLE_MARGIN + y*BUBBLE_SIZE,
+        BUBBLE_RADIUS
+      );
+      bubble.addEventListener('click', event => {
+        game.clickOn(x,y);
+        repaint();
+      });
       stage.addChild(bubble);
     }
   }
   stage.update();
+  console.log(game.toString());
 };
 const resize = () => {
   stage.canvas.width = window.innerWidth;
