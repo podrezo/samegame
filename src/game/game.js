@@ -13,6 +13,7 @@ class Piece {
 
 class Game {
   constructor(colsTotal = 0, rowsTotal = 0) {
+    this.score = 0;
     this.dimx = colsTotal;
     this.dimy = rowsTotal;
     this.grid = [];
@@ -86,14 +87,18 @@ class Game {
   }
 
   destroyPieces() {
+    let currentValue = 10;
     for(let y = 0; y < this.dimy; y++) {
       for(let x = 0; x < this.dimx; x++) {
         if(this.grid[y][x] === null) continue;
         if(this.grid[y][x].selected) {
+          this.score += currentValue;
+          currentValue += 10;
           this.grid[y][x] = null;
         }
       }
     }
+    console.log(this.score);
   }
 
   toString() {
