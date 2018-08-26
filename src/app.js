@@ -19,10 +19,6 @@ const winGame = () => {
   alert(`You win with ${game.score} points!`);
   newGame();
 };
-const newGame = () => {
- game = new Game(winGame, 6, 4);
-}
-newGame();
 
 
 const repaint = () => {
@@ -70,9 +66,19 @@ const repaint = () => {
 const resize = () => {
   stage.canvas.width = window.innerWidth;
   stage.canvas.height = window.innerHeight;
-  repaint();
+  if(game) {
+    repaint();
+  }
 };
 window.addEventListener('resize', resize, false);
 window.addEventListener('load', event => {
   resize();
+  newGame();
 });
+
+const newGame = () => {
+  const cols = Math.floor(stage.canvas.width / BUBBLE_SIZE);
+  const rows = Math.floor(stage.canvas.height / BUBBLE_SIZE);
+  game = new Game(winGame, cols, rows);
+  repaint();
+}
