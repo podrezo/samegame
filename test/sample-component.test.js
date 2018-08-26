@@ -20,29 +20,34 @@ describe('setGrid', () => {
   });
 });
 
-describe('clickOn', () => {
+describe('selectPieces', () => {
   let game;
   beforeEach(() => {
     game = new Game();
     game.setGrid('120\n000');
   });
-  test('clickOn selects correct pieces (single)', () => {
-    game.clickOn(0,0);
+  test('selectPieces works if empty spot clicked', () => {
+    game.setGrid('  \n  ');
+    game.selectPieces(0,0);
+    expect(game.toString()).toEqual('  \n  ');
+  });
+  test('selectPieces selects correct pieces (single)', () => {
+    game.selectPieces(0,0);
     expect(game.toString()).toEqual('*20\n000');
   });
-  test('clickOn selects correct pieces (multiple)', () => {
-    game.clickOn(2,0);
+  test('selectPieces selects correct pieces (multiple)', () => {
+    game.selectPieces(2,0);
     expect(game.toString()).toEqual('12*\n***');
   });
-  test('clickOn selects correct pieces after second click', () => {
-    game.clickOn(2,0);
+  test('selectPieces selects correct pieces after second click', () => {
+    game.selectPieces(2,0);
     expect(game.toString()).toEqual('12*\n***');
-    game.clickOn(0,0);
+    game.selectPieces(0,0);
     expect(game.toString()).toEqual('*20\n000');
   });
-  test('clickOn selects correct pieces (complex)', () => {
+  test('selectPieces selects correct pieces (complex)', () => {
     game.setGrid('1110\n1001\n1110');
-    game.clickOn(0,1);
+    game.selectPieces(0,1);
     expect(game.toString()).toEqual('***0\n*001\n***0');
   });
 });

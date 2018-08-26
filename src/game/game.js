@@ -28,7 +28,7 @@ class Game {
   setGrid(setup) {
     this.grid = setup.split('\n').map(line => {
       return line.split('').map(colorCode => {
-        return new Piece(colorCode);
+        return colorCode === ' ' ? null : new Piece(colorCode);
       });
     });
     this.dimy = this.grid.length;
@@ -36,9 +36,22 @@ class Game {
   }
 
   clickOn(x,y) {
+    // ignore clicks on empty spaces
+    if(this.grid[y][x] === null) return;
+    if(this.grid[y][x].selected) {
+      this.destroyPieces();
+    } else {
+      this.selectPieces(x,y);
+    }
+  }
+
+  selectPieces(x, y) {
+    // ignore clicks on empty spaces
+    if(this.grid[y][x] === null) return;
     // reset 
     this.grid.forEach(line => {
       line.forEach(piece => {
+        if(piece === null) return;
         piece.selected = false;
         piece.visited = false;
       });
@@ -60,7 +73,7 @@ class Game {
         if(c.y + dir.y < 0 || c.y + dir.y >= this.dimy) return;
         if(c.x + dir.x < 0 || c.x + dir.x >= this.dimx) return;
         let neighbor =  this.grid[c.y + dir.y][c.x + dir.x];
-        if(neighbor.visited) return;
+        if(neighbor === null || neighbor.visited) return;
         neighbor.visited = true;
         if(neighbor.color === matchColor) {
           q.unshift({
@@ -69,6 +82,17 @@ class Game {
           });
         }
       });
+    }
+  }
+
+  destroyPieces() {
+    for(let y = 0; y < this.dimy; y++) {
+      for(let x = 0; x < this.dimx; x++) {
+        if(this.grid[y][x] === null) continue;
+        if(this.grid[y][x].selected) {
+          this.grid[y][x] = null;
+        }
+      }
     }
   }
 
