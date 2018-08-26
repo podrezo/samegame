@@ -40,13 +40,14 @@ class Game {
     // ignore clicks on empty spaces
     if(this.grid[y][x] === null) return;
     if(this.grid[y][x].selected) {
-      this.destroyPieces();
+      this._destroyPieces();
+      this._fallPieces();
     } else {
-      this.selectPieces(x,y);
+      this._selectPieces(x,y);
     }
   }
 
-  selectPieces(x, y) {
+  _selectPieces(x, y) {
     // ignore clicks on empty spaces
     if(this.grid[y][x] === null) return;
     // reset 
@@ -86,7 +87,7 @@ class Game {
     }
   }
 
-  destroyPieces() {
+  _destroyPieces() {
     let currentValue = 10;
     for(let y = 0; y < this.dimy; y++) {
       for(let x = 0; x < this.dimx; x++) {
@@ -96,6 +97,29 @@ class Game {
           currentValue += 10;
           this.grid[y][x] = null;
         }
+      }
+    }
+  }
+
+  _fallPieces() {
+    // iterate over each column instead of each row
+    for(let x = 0; x < this.dimx; x++) {
+      // build a compacted array without any empty spots
+      let compactedList = [];
+      for(let y = 0; y < this.dimy; y++) {
+        if(this.grid[y][x] === null) {
+          continue;
+        } else {
+          compactedList.push(this.grid[y][x]);
+        }
+      }
+      // pad the compacted list as needed
+      while(compactedList.length < this.dimy) {
+        compactedList.unshift(null);
+      }
+      // Go down the column again and reconfigure
+      for(let y = 0; y < this.dimy; y++) {
+        this.grid[y][x] = compactedList[y];
       }
     }
   }

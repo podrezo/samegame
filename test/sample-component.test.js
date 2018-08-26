@@ -20,35 +20,77 @@ describe('setGrid', () => {
   });
 });
 
-describe('selectPieces', () => {
+describe('clickOn', () => {
+  test('empty space click', () => {
+    const game = new Game();
+    game.setGrid(' ');
+    game.clickOn(0,0);
+  });
+  test('first click selects, second click destroys', () => {
+    const game = new Game();
+    game.setGrid('000');
+    game.clickOn(0,0);
+    expect(game.toString()).toEqual('***');
+    game.clickOn(0,0);
+    expect(game.toString()).toEqual('   ');
+  });
+  test('changing selection', () => {
+    const game = new Game();
+    game.setGrid('01');
+    game.clickOn(0,0);
+    expect(game.toString()).toEqual('*1');
+    game.clickOn(1,0);
+    expect(game.toString()).toEqual('0*');
+  });
+});
+
+describe('_selectPieces', () => {
   let game;
   beforeEach(() => {
     game = new Game();
     game.setGrid('120\n000');
   });
-  test('selectPieces works if empty spot clicked', () => {
+  test('_selectPieces works if empty spot clicked', () => {
     game.setGrid('  \n  ');
-    game.selectPieces(0,0);
+    game._selectPieces(0,0);
     expect(game.toString()).toEqual('  \n  ');
   });
-  test('selectPieces selects correct pieces (single)', () => {
-    game.selectPieces(0,0);
+  test('_selectPieces selects correct pieces (single)', () => {
+    game._selectPieces(0,0);
     expect(game.toString()).toEqual('*20\n000');
   });
-  test('selectPieces selects correct pieces (multiple)', () => {
-    game.selectPieces(2,0);
+  test('_selectPieces selects correct pieces (multiple)', () => {
+    game._selectPieces(2,0);
     expect(game.toString()).toEqual('12*\n***');
   });
-  test('selectPieces selects correct pieces after second click', () => {
-    game.selectPieces(2,0);
-    expect(game.toString()).toEqual('12*\n***');
-    game.selectPieces(0,0);
-    expect(game.toString()).toEqual('*20\n000');
-  });
-  test('selectPieces selects correct pieces (complex)', () => {
+  test('_selectPieces selects correct pieces (complex)', () => {
     game.setGrid('1110\n1001\n1110');
-    game.selectPieces(0,1);
+    game._selectPieces(0,1);
     expect(game.toString()).toEqual('***0\n*001\n***0');
   });
 });
 
+describe('_destroyPieces', () => {
+  let game;
+  beforeEach(() => {
+    game = new Game();
+    game.setGrid('1110\n1001\n1110');
+    game._selectPieces(0,0);
+  });
+  test('all selected pieces are destroyed', () => {
+    game._destroyPieces();
+    expect(game.toString()).toEqual('   0\n 001\n   0');
+  });
+});
+
+describe('_fallPieces', () => {
+  let game;
+  beforeEach(() => {
+    game = new Game();
+    game.setGrid('   0\n 001\n   0');
+  });
+  test('pieces fall down', () => {
+    game._fallPieces();
+    expect(game.toString()).toEqual('   0\n   1\n 000');
+  });
+});
