@@ -50,8 +50,14 @@ const repaint = () => {
       stage.addChild(bubble);
     }
   }
+  // display score
+  const text = new createjs.Text(game.score.toString(), '20px Helvetica', 'white');
+  const textBounds = text.getBounds();
+  text.x = stage.canvas.width - textBounds.width;
+  text.y = 0;
+  stage.addChild(text);
+  // render
   stage.update();
-  console.log(game.toString());
 };
 const resize = () => {
   stage.canvas.width = window.innerWidth;

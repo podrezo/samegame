@@ -98,7 +98,6 @@ class Game {
         }
       }
     }
-    console.log(this.score);
   }
 
   toString() {
