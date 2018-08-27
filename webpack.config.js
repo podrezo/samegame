@@ -2,7 +2,10 @@ const path = require('path');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const webpack = require('webpack');
+
+const PUBLIC_PATH = 'https://podrezo.github.io/samegame/';
 
 const config = {
   // FIXME: Context doesn't seem to be used, have to manually specify the extra directory for entry points
@@ -13,7 +16,8 @@ const config = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: './assets/js/[name].bundle.js'
+    filename: './assets/js/[name].bundle.js',
+    publicPath: PUBLIC_PATH,
   },
   devtool: 'inline-source-map', // not for prod
   mode: 'development',
@@ -44,7 +48,17 @@ const config = {
           sizes: [96, 128, 192, 256, 384, 512] // multiple sizes
         }
       ]
-    })
+    }),
+    new SWPrecacheWebpackPlugin(
+      {
+        cacheId: 'same-game',
+        dontCacheBustUrlsMatching: /\.\w{8}\./,
+        filename: 'service-worker.js',
+        minify: true,
+        navigateFallback: PUBLIC_PATH + 'index.html',
+        staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/],
+      }
+    ),
   ],
   module: {
     rules: [

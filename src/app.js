@@ -1,6 +1,12 @@
 import './assets/scss/app.scss';
 // import './react-app';
 
+(() => {
+  if('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
+})();
+
 // Draw a square on screen.
 import { createjs } from '@createjs/easeljs';
 import Game from './game/game';
